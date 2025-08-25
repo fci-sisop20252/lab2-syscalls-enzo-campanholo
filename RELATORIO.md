@@ -157,7 +157,7 @@ Mantemos memória inútil e impossibilitamos outros programas de acessar aqueles
 **1. Como as syscalls demonstram a transição usuário → kernel?**
 
 ```
-[Sua análise aqui]
+As syscalls são o mecanismo que permite que programas em espaço de usuário façam coisas que o kernel tem acesso.
 ```
 
 **2. Qual é o seu entendimento sobre a importância dos file descriptors?**
