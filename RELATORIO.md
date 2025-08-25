@@ -66,10 +66,10 @@ Precisamos verficar o retorno de cada syscall para ter certeza de que ela foi be
 ## 3️⃣ Exercício 3 - Contador com Loop
 
 ### 📋 Resultados (BUFFER_SIZE = 64):
-- Linhas: _____ (esperado: 25)
-- Caracteres: _____
-- Chamadas read(): _____
-- Tempo: _____ segundos
+- Linhas: 25 (esperado: 25)
+- Caracteres: 1300
+- Chamadas read(): 21
+- Tempo: 0.000080 segundos
 
 ### 🧪 Experimentos com buffer:
 
