@@ -75,29 +75,29 @@ Precisamos verficar o retorno de cada syscall para ter certeza de que ela foi be
 
 | Buffer Size | Chamadas read() | Tempo (s) |
 |-------------|-----------------|-----------|
-| 16          |                 |           |
-| 64          |                 |           |
-| 256         |                 |           |
-| 1024        |                 |           |
+| 16          |       82        |  0.000197 |
+| 64          |       21        | 0.000081  |
+| 256         |       6         | 0.000083  |
+| 1024        |        2        | 0.000051  |
 
 ### 🔍 Análise
 
 **1. Como o tamanho do buffer afeta o número de syscalls?**
 
 ```
-[Sua análise aqui]
+Quanto maior o tamanho do buffer, menor o número de syscalls que precisamos fazer, porque conseguimos armazenar mais informação em apenas uma chamada do read, tendo que chamar menos vezes até atingirmos o final da file.
 ```
 
 **2. Todas as chamadas read() retornaram BUFFER_SIZE bytes? Discorra brevemente sobre**
 
 ```
-[Sua análise aqui]
+Não necessariamente. O tamano do read depende de quantos caracteres estão disponíveis para serem lidos. Se chegarmos no final da file, leremos apenas os caracteres restantes, o que pode ser menor que o tamanho do buffer.
 ```
 
 **3. Qual é a relação entre syscalls e performance?**
 
 ```
-[Sua análise aqui]
+Geralmente, quanto menor o número de syscalls, melhor a performace.
 ```
 
 ---
@@ -105,47 +105,47 @@ Precisamos verficar o retorno de cada syscall para ter certeza de que ela foi be
 ## 4️⃣ Exercício 4 - Cópia de Arquivo
 
 ### 📈 Resultados:
-- Bytes copiados: _____
-- Operações: _____
-- Tempo: _____ segundos
-- Throughput: _____ KB/s
+- Bytes copiados: 1364
+- Operações: 6
+- Tempo: 0.000204 segundos
+- Throughput: 6529.56 KB/s
 
 ### ✅ Verificação:
 ```bash
 diff dados/origem.txt dados/destino.txt
 ```
-Resultado: [ ] Idênticos [ ] Diferentes
+Resultado: [X] Idênticos [ ] Diferentes
 
 ### 🔍 Análise
 
 **1. Por que devemos verificar que bytes_escritos == bytes_lidos?**
 
 ```
-[Sua análise aqui]
+Para ter certeza que não estamos copiando mais ou menos bytes do que deveríamos.
 ```
 
 **2. Que flags são essenciais no open() do destino?**
 
 ```
-[Sua análise aqui]
+O_WRONLY | O_CREAT | O_TRUNC e 0644. O 0644 nos dá as seguintes permissões: rw-r--r--.
 ```
 
 **3. O número de reads e writes é igual? Por quê?**
 
 ```
-[Sua análise aqui]
+Tratando-se apenas das operações de copia/cola, o número de reads e writes deve ser igual, já que fazemos uma escrita para cada vez que lemos.
 ```
 
 **4. Como você saberia se o disco ficou cheio?**
 
 ```
-[Sua análise aqui]
+Erros na operação de write como menos bytes escritos do que esperado, erros como -1, etc.
 ```
 
 **5. O que acontece se esquecer de fechar os arquivos?**
 
 ```
-[Sua análise aqui]
+Mantemos memória inútil e impossibilitamos outros programas de acessar aqueles arquivos, já que o kernel vai manter o arquivo como locked, por ter um fd aberto.
 ```
 
 ---
@@ -163,13 +163,13 @@ Resultado: [ ] Idênticos [ ] Diferentes
 **2. Qual é o seu entendimento sobre a importância dos file descriptors?**
 
 ```
-[Sua análise aqui]
+Os files descriptors ajudam o kernel a impedir operações inválidas como um programa tentando ler de uma file enquanto ele esté sendo escrita ou lida por outro.
 ```
 
 **3. Discorra sobre a relação entre o tamanho do buffer e performance:**
 
 ```
-[Sua análise aqui]
+Ao aumentar o tamanho do buffer, aumentamos a memória usada no processo, mas diminuimos o número de syscalls necessárias, trocamos memória por um tempo de execução mais rápido.
 ```
 
 ### ⚡ Comparação de Performance
@@ -180,21 +180,21 @@ time ./ex4_copia
 time cp dados/origem.txt dados/destino_cp.txt
 ```
 
-**Qual foi mais rápido?** _____
+**Qual foi mais rápido?** Minha
 
 **Por que você acha que foi mais rápido?**
 
 ```
-[Sua análise aqui]
+Provavelmente o cp faz mais verficações para evitar erros em outros cenários onde meu programa teria erros.
 ```
 
 ---
 
 ## 📤 Entrega
 Certifique-se de ter:
-- [ ] Todos os códigos com TODOs completados
-- [ ] Traces salvos em `traces/`
-- [ ] Este relatório preenchido como `RELATORIO.md`
+- [X] Todos os códigos com TODOs completados
+- [X] Traces salvos em `traces/`
+- [X] Este relatório preenchido como `RELATORIO.md`
 
 ```bash
 strace -e write -o traces/ex1a_trace.txt ./ex1a_printf
